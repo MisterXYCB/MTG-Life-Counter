@@ -39,9 +39,9 @@ export default function LifeCounter({ className }: { className?: string}) {
 
 
     return (
-        <div className={`relative pt-10 flex flex-col items-center justify-center w-full h-full ${className}`} style={{backgroundColor: backgroundColor, color: color}}>
+        <div className={`relative pt-10 flex flex-col items-center justify-center ${className}`} style={{backgroundColor: backgroundColor, color: color}}>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0"/>
-            <div className="absolute w-9 h-9 rounded-full top-4 right-4" style={{backgroundColor: buttonColor}} onClick={(event) => {setColorMenuVisibility(!colorMenuVisible)}}><span className="material-symbols-outlined">palette</span></div>
+            <div className="absolute w-9 h-9 rounded-full top-4 right-4" style={{backgroundColor: buttonColor}} onClick={(event) => {setColorMenuVisibility(!colorMenuVisible)}}><span className="material-symbols-outlined scale">palette</span></div>
             <div className="text-xs">Player</div>
             <Colorful style={colorMenuVisible ? {position: "fixed", visibility:"visible"} : {visibility: "hidden", position: "fixed"}} disableAlpha={true} color={color} onChange={(newColor) => {changeColor(newColor.hex)}}/>
             <div
