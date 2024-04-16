@@ -4,25 +4,13 @@ import { useState, useEffect } from "react";
 import { Colorful } from "@uiw/react-color";
 const tinycolor = require("tinycolor2");
 
-export default function LeftRotatedLifeCounter({ className, heightPercentage = 100, widthPercentage = 50 }: { className?: string, heightPercentage?: number, widthPercentage?: number }) {
+export default function LeftRotatedLifeCounter({ className, startLife = 20, scale = 100, isCommander = true}: { className?: string, startLife?: number, scale?: number, isCommander?: boolean}) {
     const [color, setColor] = useState("rgb(239, 68, 68)");
     const [backgroundColor, setBackgroundColor] = useState("rgb(254, 202, 202)");
     const [buttonColor, setButtonColor] = useState("rgb(248, 113, 113)");
     const [colorMenuVisible, setColorMenuVisibility] = useState(false);
-    const [life, setLife] = useState(20);
+    const [life, setLife] = useState(startLife);
     const [commanderDamage, setCommanderDamage] = useState(0);
-    const [height, setHeight] = useState(50);
-    const [width, setWidth] = useState(100);
-
-    useEffect(() => {
-        function handleResize() {
-            setHeight(window.innerWidth * (widthPercentage / 100));
-            setWidth(window.innerHeight * (heightPercentage / 100));
-        }
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [heightPercentage, widthPercentage]);
     
     function changeColor(inputColor: any) {
         let newColor = tinycolor(inputColor);
@@ -51,28 +39,28 @@ export default function LeftRotatedLifeCounter({ className, heightPercentage = 1
 
 
     return (
-        <div className={`relative flex flex-col items-center justify-center -rotate-90 ${className}`} style={{backgroundColor: backgroundColor, color: color, width: width, height: height, left: (height)}}>
+        <div className={`flex flex-row items-center justify-center flex-wrap ${className}`} style={{backgroundColor: backgroundColor, color: color}}>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0"/>
-            <div className="absolute w-9 h-9 rounded-full top-4 right-4" style={{backgroundColor: buttonColor}} onClick={(event) => {setColorMenuVisibility(!colorMenuVisible)}}><span className="material-symbols-outlined scale">palette</span></div>
-            <div className="text-xs">Player</div>
-            <Colorful style={colorMenuVisible ? {position: "fixed", visibility:"visible"} : {visibility: "hidden", position: "fixed"}} disableAlpha={true} color={color} onChange={(newColor) => {changeColor(newColor.hex)}} rotation={270}/>
+            <div className={`absolute w-10 h-10 rounded-full top-4 left-4 ${"scale-" + scale}`} style={{backgroundColor: buttonColor}} onClick={(event) => {setColorMenuVisibility(!colorMenuVisible)}}><span className="material-symbols-outlined absolute top-3 left-3 w-10 h-10 scale-150">palette</span></div>
+            <div className={`text-s ${"scale-" + scale} -rotate-90`}>Player</div>
             <div
-                className={`flex items-center justify-between w-64 h-24 text-4xl font-black rounded-full `}
-                style={{color: color, background: backgroundColor}}
+                className={`flex items-center justify-between w-64 h-24 text-4xl font-black rounded-full -rotate-90 ${"scale-" + scale}`}
+                style={{color: color, background: "transparent"}}
             >
                 <button className={`w-12 h-12 text-white rounded-full`} style={{backgroundColor: buttonColor}} onClick={(event) => {changeLifeTotal(-1)}}>-</button>
                 <div>{life}</div>
                 <button className={`w-12 h-12 text-white rounded-full`} style={{backgroundColor: buttonColor}} onClick={(event) => {changeLifeTotal(1)}}>+</button>
             </div>
-            <div
-                className={`flex items-center justify-between pb-10 w-44 h-18 text-3xl font-medium rounded-full`}
-                style={{color: color, background: backgroundColor}}
+            {isCommander ? <div
+                className={`flex items-center justify-between w-44 h-18 text-3xl font-medium rounded-full -rotate-90 ${"scale-" + scale}`}
+                style={{color: color, background: "transparent"}}
             >
                 <button className={`w-10 h-10 text-white rounded-full`} style={{backgroundColor: buttonColor}} onClick={(event) => {changeCommanderDamage(-1)}}>-</button>
                 <div>{commanderDamage}</div>
                 <button className={`w-10 h-10 text-white rounded-full`} style={{backgroundColor: buttonColor}} onClick={(event) => {changeCommanderDamage(1)}}>+</button>
-            </div>
-            <div className="text-xs">Deck</div>
+            </div> : null}
+            <div className={`text-xs -rotate-90 ${"scale-" + scale}`}>Deck</div>
+            <Colorful className={`-rotate-90 ${"scale-" + scale}`} style={colorMenuVisible ? {position: "fixed", visibility:"visible"} : {visibility: "hidden", position: "fixed"}} disableAlpha={true} color={color} onChange={(newColor) => {changeColor(newColor.hex)}} rotation={270}/>
         </div>
     );
 }
